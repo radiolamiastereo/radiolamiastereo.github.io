@@ -8,9 +8,45 @@
 </head>
  
 <body style="margin:0px">
+<div id="now-playing">
+ 
+        <h3 id="artist">Cargando artista...</h3>
+        <p id="song">Cargando canción...</p>
+    </div>
 
-<iframe src="https://www6.cbox.ws/box/?boxid=830053&boxtag=mL5Zra" width="100%" height="250" allowtransparency="yes" allow="autoplay" frameborder="1" marginheight="1" marginwidth="1" scrolling="auto"></iframe>	
+    <script>
+        // Reemplaza 'TU_ID_DE_ESTACION' por el identificador real de tu radio en Zeno
+        const zenoUrl = 'https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv';
 
+        const eventSource = new EventSource(zenoUrl);
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            // Zeno suele enviar el título como "Artista - Canción" en la propiedad streamTitle
+            const rawTitle = data.streamTitle || "";
+            const parts = rawTitle.split(" - ");
+
+            if (parts.length >= 2) {
+                document.getElementById('artist').innerText = parts[0].trim();
+                document.getElementById('song').innerText = parts.slice(1).join(" - ").trim();
+            } else {
+                document.getElementById('artist').innerText = "En vivo";
+                document.getElementById('song').innerText = rawTitle;
+            }
+        };
+
+        eventSource.onerror = function(err) {
+            console.error("Error en la conexión de metadatos de Zeno:", err);
+        };
+    </script>
+
+
+
+
+<iframe src="https://www3.cbox.ws/box/?boxid=3560818&boxtag=W5Voax" width="100%" height="250" allowtransparency="yes" allow="autoplay" frameborder="1" marginheight="1" marginwidth="0" scrolling="auto"></iframe>	
+
+ 
 
 
 
@@ -81,6 +117,9 @@ $("#lunaradio").lunaradio({
 
 </script>					
 <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7089c43e/cloudflare-static/rocket-loader.min.js" data-cf-settings="3bc5e4e5245e387f3290c38f-|49" defer=""></script>
+
+
+
 
 </body>
 
