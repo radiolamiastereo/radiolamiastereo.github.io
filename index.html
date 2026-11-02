@@ -3,28 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RADIO LA MIA STEREO ONLINE - DJ ALFA - RESPONSIVO</title>
+<title>RADIO LA MIA STEREO ONLINE - DJ ALFA - CENTRADO PERFECTO</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#050816;display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100dvh;font-family:Arial;overflow:hidden}
-.player{width:94%;max-width:420px;background:#0a0a1f;border:2px solid #00ffff;border-radius:24px;overflow:hidden;box-shadow:0 0 25px #00ffff,0 0 50px #ff00ff66;text-align:center;color:#fff;position:relative;display:flex;flex-direction:column}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%}
+body{
+  background:#050816;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  min-height:100dvh;
+  font-family:Arial;
+  padding:0;
+  overflow:auto;
+}
+/* CONTENEDOR CENTRADO QUE DA ESPACIO IGUAL ARRIBA Y ABAJO */
+.centerWrap{
+  width:100%;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px 12px; /* ESPACIO IGUAL ARRIBA Y ABAJO */
+}
+.player{
+  width:100%;
+  max-width:420px;
+  background:#0a0a1f;
+  border:2px solid #00ffff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 0 25px #00ffff,0 0 50px #ff00ff66,0 25px 60px #000;
+  text-align:center;
+  color:#fff;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  margin:auto; /* CENTRADO PERFECTO */
+}
 .img-box{height:540px;position:relative;overflow:hidden;background:#000;flex-shrink:0}
 .img-box img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
 .titles{position:absolute;top:14px;left:0;right:0;z-index:4}
 .titles h1{margin:0;color:#aaffff;font-size:19px;text-shadow:0 0 12px #00ffff,0 0 25px #ff00ff}
 .titles h2{margin:2px 0 0;color:#fff;font-size:12px;letter-spacing:4px;background:#00000066;display:inline-block;padding:3px 10px;border-radius:20px;border:1px solid #ff00ff55}
 .djname{position:absolute;bottom:100px;left:0;right:0;color:#fff;font-weight:bold;font-size:26px;text-shadow:0 0 15px #ff00ff,0 0 30px #00ffff;z-index:5}
-.content{padding:12px;background:linear-gradient(180deg,#0f0c29,#1e1440)}
-.now{margin:0 0 4px;padding:10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55;overflow:hidden}
+.content{padding:14px 12px 20px;background:linear-gradient(180deg,#0f0c29,#1e1440)}
+.now{margin:0 0 6px;padding:10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55;overflow:hidden}
 #songTitleWrap{overflow:hidden;white-space:nowrap;position:relative;height:18px}
 #songTitle{display:inline-block;padding-left:100%;white-space:nowrap;font-weight:bold;font-size:13px;color:#fff;text-shadow:0 0 8px #00ffff;animation:scroll 14s linear infinite}
 @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 #artist{color:#ff7bff;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.eq-mini{display:flex;justify-content:center;align-items:end;gap:3px;height:22px;margin:8px 0 6px}
+.eq-mini{display:flex;justify-content:center;align-items:end;gap:3px;height:22px;margin:10px 0 8px}
 .eq-mini .bar{width:4px;height:6px;background:linear-gradient(to top,#00ffff,#ff00ff);border-radius:2px 2px 0 0;transition:height 0.08s}
-.btns{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:4px}
+.btns{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:6px}
 .play{border:3px solid #ff00ff;background:radial-gradient(circle,#2a2a5a,#0a0a1f);width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 0 20px #ff00ff;color:#fff;z-index:5}
-.chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff;position:relative}
+.chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff}
 canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
 #waveMiddle{top:50%;height:90px;transform:translateY(-50%)}
 .chatWindow{position:absolute;bottom:0;left:0;right:0;height:88%;background:#0a0a1f;border-top:2px solid #00ffff;border-radius:20px 20px 0 0;z-index:30;transform:translateY(100%);transition:transform 0.35s ease;display:flex;flex-direction:column}
@@ -36,71 +71,42 @@ canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
 .chatFrame{flex:1;border:none;width:100%;background:#fff}
 .onlineDot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 8px #00ff00;display:inline-block;margin-right:4px}
 
-/* ===== RESPONSIVO CELULAR ===== */
+/* ===== CELULAR - CENTRADO CON ESPACIO IGUAL ===== */
 @media (max-width:600px){
-  body{padding:0;background:#000}
-  .player{width:100%;max-width:100%;height:100vh;height:100dvh;border:none;border-radius:0;box-shadow:none}
-  .img-box{height:62vh;height:62dvh}
-  .titles h1{font-size:22px}
-  .djname{font-size:28px;bottom:18%}
-  .content{flex:1;padding:14px 12px 18px;display:flex;flex-direction:column;justify-content:center}
-  .now{padding:12px}
-  #songTitle{font-size:14px}
-  .eq-mini{height:28px;gap:4px}
-  .eq-mini .bar{width:5px}
-  .play,.chatBtn{width:78px;height:78px;font-size:30px}
-  .chatWindow{height:92%}
+  .centerWrap{padding:25px 10px;align-items:center}
+  .player{max-width:100%;border-radius:22px}
+  .img-box{height:56vh;height:56dvh;min-height:440px}
+  .djname{font-size:26px;bottom:16%}
 }
 
-/* ===== RESPONSIVO TABLET ===== */
-@media (min-width:601px) and (max-width:1024px){
-  .player{max-width:480px}
-  .img-box{height:580px}
-}
-
-/* ===== RESPONSIVO PC ESCRITORIO ===== */
-@media (min-width:1025px){
-  body{background:radial-gradient(ellipse at center,#1a1a3a 0%,#050816 70%);padding:20px}
-  .player{max-width:460px;border-width:3px;box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff55,0 20px 60px #000}
-  .img-box{height:600px}
-  .titles h1{font-size:24px;letter-spacing:1px}
-  .djname{font-size:32px;letter-spacing:1px}
-  .content{padding:18px}
-  #songTitle{font-size:15px}
-  .eq-mini{height:30px;gap:5px}
-  .eq-mini .bar{width:6px}
-  .play,.chatBtn{width:80px;height:80px;font-size:32px;transition:transform 0.2s}
-  .play:hover,.chatBtn:hover{transform:scale(1.08);box-shadow:0 0 30px #ff00ff}
-  /* En PC el chat se ve como panel lateral */
-  .chatWindow{height:88%;border:2px solid #00ffff;border-radius:20px;bottom:10px;left:10px;right:10px;transform:translateY(120%)}
-  .chatWindow.open{transform:translateY(0)}
-}
-
-/* ===== PANTALLAS MUY ALTAS (celulares largos) ===== */
-@media (max-height:700px) and (max-width:600px){
-  .img-box{height:55vh}
-  .djname{bottom:12%;font-size:24px}
+/* ===== PC - CENTRADO FLOTANTE PREMIUM ===== */
+@media (min-width:601px){
+  body{background:radial-gradient(ellipse at center,#1a1a3a 0%,#050816 75%)}
+  .centerWrap{padding:40px 20px}
+  .player{max-width:440px}
 }
 </style>
 </head>
 <body>
-<div class="player">
-  <div class="img-box" id="imgBox">
-    <img src="dj.jpg" alt="RADIO LA MIA STEREO ONLINE">
-    <canvas id="waveMiddle"></canvas>
-    <div class="titles"><h1>RADIO LA MIA STEREO</h1><h2>ONLINE</h2></div>
-    <div class="djname">DJ ALFA EN VIVO</div>
-    <div class="chatWindow" id="chatWindow">
-      <div class="chatHeader"><div><h3><span class="onlineDot"></span>CHAT OFICIAL EN VIVO</h3><small>RADIO LA MIA STEREO ONLINE • DJ ALFA</small></div><button class="closeChat" onclick="toggleChat()">✕</button></div>
-      <iframe class="chatFrame" src="https://my.cbox.ws/Chat-Radio-La-Mia-st" title="Chat Radio La Mia"></iframe>
+<div class="centerWrap">
+  <div class="player">
+    <div class="img-box" id="imgBox">
+      <img src="dj.jpg" alt="RADIO LA MIA STEREO ONLINE">
+      <canvas id="waveMiddle"></canvas>
+      <div class="titles"><h1>RADIO LA MIA STEREO</h1><h2>ONLINE</h2></div>
+      <div class="djname">DJ ALFA EN VIVO</div>
+      <div class="chatWindow" id="chatWindow">
+        <div class="chatHeader"><div><h3><span class="onlineDot"></span>CHAT OFICIAL EN VIVO</h3><small>RADIO LA MIA STEREO ONLINE • DJ ALFA</small></div><button class="closeChat" onclick="toggleChat()">✕</button></div>
+        <iframe class="chatFrame" src="https://my.cbox.ws/Chat-Radio-La-Mia-st" title="Chat Radio La Mia"></iframe>
+      </div>
     </div>
-  </div>
-  <div class="content">
-    <div class="now"><small style="color:#00ffff;font-size:8px;letter-spacing:2px">♪ TEMA ACTUAL EN VIVO</small><div id="songTitleWrap"><div id="songTitle">Toca Play para activar ondas • RADIO LA MIA STEREO ONLINE • DJ ALFA EN VIVO</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
-    <div class="eq-mini" id="eqMini"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-    <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">▶️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
-    <p id="status" style="font-size:9px;color:#aaa;margin-top:8px"><span class="onlineDot"></span> RESPONSIVO • CELULAR Y PC • DJ ALFA</p>
-    <audio id="radio" crossorigin="anonymous" preload="none"><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
+    <div class="content">
+      <div class="now"><small style="color:#00ffff;font-size:8px;letter-spacing:2px">♪ TEMA ACTUAL EN VIVO</small><div id="songTitleWrap"><div id="songTitle">Toca Play para activar ondas • RADIO LA MIA STEREO ONLINE • DJ ALFA EN VIVO</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
+      <div class="eq-mini" id="eqMini"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+      <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">▶️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
+      <p id="status" style="font-size:9px;color:#aaa;margin-top:10px"><span class="onlineDot"></span> CENTRADO PERFECTO • MISMO ESPACIO ARRIBA Y ABAJO</p>
+      <audio id="radio" crossorigin="anonymous" preload="none"><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
+    </div>
   </div>
 </div>
 
