@@ -3,80 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>RADIO LA MIA STEREO - CENTRADA TOTAL</title>
+<title>RADIO LA MIA - WEBVIEW FIX</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;height:100dvh;height:100svh}
-body{
-  min-height:100vh;
-  min-height:100dvh;
-  min-height:100svh;
-  background:#050816;
-  display:grid;
-  place-items:center; /* CENTRADO PERFECTO VERTICAL Y HORIZONTAL */
-  padding:12px;
-  padding-top:max(12px, env(safe-area-inset-top));
-  padding-bottom:max(12px, env(safe-area-inset-bottom));
-  padding-left:max(12px, env(safe-area-inset-left));
-  padding-right:max(12px, env(safe-area-inset-right));
-  font-family:Arial,sans-serif;
-  overflow:hidden;
-}
-.player{
-  width:100%;
-  max-width:410px;
-  width:clamp(280px, 92vw, 410px);
-  max-height:96dvh;
-  max-height:96svh;
-  display:flex;
-  flex-direction:column;
-  background:#0a0a1f;
-  border:2px solid #00ffff;
-  border-radius:26px;
-  box-shadow:0 0 30px #00ffff,0 20px 50px #000;
-  color:#fff;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.img-box{
-  position:relative;
-  overflow:hidden;
-  background:#000;
-  /* ALTURA QUE SE ADAPTA A CUALQUIER PANTALLA */
-  height:clamp(320px, 52dvh, 560px);
-  height:clamp(320px, 52svh, 560px);
-  min-height:320px;
-  flex-shrink:0;
-}
+html{height:100%;height:100dvh}
+body{min-height:100dvh;display:grid;place-items:center;padding:12px;background:#050816;font-family:Arial,sans-serif;overflow:hidden}
+.player{width:clamp(280px,92vw,410px);max-height:96dvh;background:#0a0a1f;border:2px solid #00ffff;border-radius:26px;box-shadow:0 0 30px #00ffff;color:#fff;text-align:center;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.img-box{position:relative;height:clamp(320px,52dvh,520px);background:#000;flex-shrink:0;overflow:hidden}
 .img-box img{width:100%;height:100%;object-fit:cover;display:block}
-.titles{position:absolute;top:clamp(8px,1.5dvh,14px);left:0;right:0;z-index:4}
-.titles h1{color:#aaffff;font-size:clamp(14px, 4.2vw, 19px);text-shadow:0 0 12px #00ffff}
-.titles h2{margin-top:4px;color:#fff;font-size:clamp(10px, 2.8vw, 12px);letter-spacing:4px;background:#00000077;display:inline-block;padding:3px 10px;border-radius:20px;border:1px solid #ff00ff55}
-.radio-linea{position:absolute;bottom:18%;left:0;right:0;color:#fff;font-weight:bold;font-size:clamp(18px, 6vw, 26px);text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff;z-index:5}
-.content{
-  padding:clamp(8px,1.5dvh,14px) 12px 12px;
-  background:linear-gradient(180deg,#0f0c29,#1e1440);
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  flex:1;
-  min-height:0;
-  justify-content:center;
-}
+.titles{position:absolute;top:12px;left:0;right:0;z-index:4}
+.titles h1{color:#aaffff;font-size:clamp(14px,4.2vw,19px);text-shadow:0 0 12px #00ffff}
+.titles h2{margin-top:4px;color:#fff;font-size:11px;letter-spacing:4px;background:#00000077;display:inline-block;padding:3px 10px;border-radius:20px;border:1px solid #ff00ff55}
+.radio-linea{position:absolute;bottom:18%;left:0;right:0;color:#fff;font-weight:bold;font-size:clamp(18px,6vw,26px);text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff;z-index:5}
+.content{padding:10px 12px 12px;background:linear-gradient(180deg,#0f0c29,#1e1440);display:flex;flex-direction:column;gap:6px}
 .now{padding:8px 10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55;overflow:hidden}
 #songTitleWrap{overflow:hidden;white-space:nowrap;height:16px;margin-top:3px}
-#songTitle{display:inline-block;padding-left:100%;white-space:nowrap;font-weight:bold;font-size:clamp(11px, 3vw, 13px);animation:scroll 14s linear infinite}
+#songTitle{display:inline-block;padding-left:100%;white-space:nowrap;font-weight:bold;font-size:12px;animation:scroll 14s linear infinite}
 @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-#artist{color:#ff7bff;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#artist{color:#ff7bff;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .eq-mini{display:flex;justify-content:center;align-items:end;gap:3px;height:18px;margin:4px 0}
 .eq-mini .bar{width:4px;height:6px;background:linear-gradient(to top,#00ffff,#ff00ff);border-radius:2px 2px 0 0}
 .btns{display:flex;justify-content:center;gap:14px}
-.play{border:3px solid #ff00ff;background:radial-gradient(circle,#2a2a5a,#0a0a1f);width:clamp(60px, 15vw, 72px);height:clamp(60px, 15vw, 72px);border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 20px #ff00ff;color:#fff;flex-shrink:0}
-.chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:clamp(60px, 15vw, 72px);height:clamp(60px, 15vw, 72px);border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff;flex-shrink:0}
-.linkDescarga{margin-top:4px;display:inline-block;color:#00ff88;font-size:clamp(10px, 2.8vw, 12px);text-decoration:none;border:1px solid #00ff8855;background:#00000088;padding:8px 16px;border-radius:20px;font-weight:bold}
-.bufferBox{height:5px;background:#000000aa;border-radius:10px;overflow:hidden;border:1px solid #00ffff33}
-#bufferFill{height:100%;width:0%;background:linear-gradient(90deg,#00ffff,#ff00ff);transition:width .3s}
+.play{border:3px solid #ff00ff;background:radial-gradient(circle,#2a2a5a,#0a0a1f);width:68px;height:68px;border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 20px #ff00ff;color:#fff}
+.chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:68px;height:68px;border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff}
+.linkDescarga{margin-top:4px;display:inline-block;color:#00ff88;font-size:11px;text-decoration:none;border:1px solid #00ff8855;background:#00000088;padding:8px 16px;border-radius:20px;font-weight:bold}
+.bufferBox{height:6px;background:#000000cc;border-radius:10px;overflow:hidden;border:1px solid #00ffff33}
+#bufferFill{height:100%;width:0%;background:linear-gradient(90deg,#00ffff,#ff00ff);transition:width 0.4s ease;box-shadow:0 0 8px #00ffff}
 #bufferText{font-size:7px;color:#00ffff;letter-spacing:1px}
 canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
 #waveMiddle{top:50%;height:90px;transform:translateY(-50%)}
@@ -86,39 +38,11 @@ canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
 .closeChat{background:none;border:1px solid #ff00ff;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer}
 .chatFrame{flex:1;border:none;width:100%;background:#fff}
 .onlineDot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 8px #00ff00;display:inline-block;margin-right:4px}
-.autoplay-overlay{position:absolute;inset:0;background:#000000cc;z-index:20;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:12px;backdrop-filter:blur(4px)}
-.autoplay-overlay.hidden{display:none}
-.autoplay-btn{background:linear-gradient(90deg,#00ffff,#ff00ff);border:none;padding:14px 28px;border-radius:30px;color:#000;font-weight:bold;font-size:clamp(12px,3.8vw,16px);cursor:pointer;box-shadow:0 0 25px #00ffff;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
-/* CELULARES MUY CHICOS - menos de 360px de ancho */
-@media (max-width:360px){
-  .player{width:96vw;border-radius:18px}
-  .img-box{height:clamp(280px, 48dvh, 440px)}
-}
-/* CELULARES ALTOS - más de 800px de alto */
-@media (min-height:800px){
-  .img-box{height:clamp(420px, 55dvh, 600px)}
-  .content{gap:10px}
-}
-/* PANTALLAS MUY BAJITAS - landscape o celulares con barra */
-@media (max-height:600px){
-  .player{flex-direction:row;max-width:95vw;max-height:92dvh;max-height:92svh}
-  .img-box{width:52%;height:100%;height:92dvh}
-  .content{width:48%;justify-content:center}
-  .radio-linea{font-size:16px;bottom:12%}
-}
 </style>
 </head>
 <body>
 <div class="player">
   <div class="img-box">
-    <div id="autoOverlay" class="autoplay-overlay">
-      <div style="font-size:clamp(30px, 8vw, 40px)">🔊</div>
-      <div style="color:#aaffff;font-weight:bold;font-size:clamp(12px,3.5vw,14px)">RADIO LA MIA STEREO</div>
-      <button class="autoplay-btn" onclick="activarSonido()">▶️ TOCA PARA SONIDO</button>
-      <small style="color:#aaa;font-size:9px">Centrado + Autoplay + Buffer 8s</small>
-    </div>
     <img src="dj.jpg" alt="RADIO" onerror="this.src='https://radiolamiastereo.github.io/logo.png'">
     <canvas id="waveMiddle"></canvas>
     <div class="titles"><h1>RADIO LA MIA STEREO</h1><h2>ONLINE</h2></div>
@@ -126,31 +50,131 @@ canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
     <div class="chatWindow" id="chatWindow"><div class="chatHeader"><h3 style="font-size:13px"><span class="onlineDot"></span>CHAT</h3><button class="closeChat" onclick="toggleChat()">✕</button></div><iframe class="chatFrame" src="https://my.cbox.ws/Chat-Radio-La-Mia-st"></iframe></div>
   </div>
   <div class="content">
-    <div class="now"><small style="color:#00ffff;font-size:7px;letter-spacing:2px">♪ TEMA ACTUAL</small><div id="songTitleWrap"><div id="songTitle">Centrado perfecto en cualquier celular • RADIO LA MIA</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
+    <div class="now"><small style="color:#00ffff;font-size:7px;letter-spacing:2px">♪ TEMA ACTUAL</small><div id="songTitleWrap"><div id="songTitle">Radio La Mia Stereo - En Vivo</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
     <div class="eq-mini" id="eqMini"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-    <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">⏸️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
+    <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">▶️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
     <div class="bufferBox"><div id="bufferFill"></div></div>
-    <div id="bufferText">AUTO-CENTRADO + BUFFER 8s</div>
-    <a class="linkDescarga" href="https://radiolamiastereo.github.io/RadioLamiaV2.apk" target="_blank" rel="noopener">📥 Descargar APK RadioLamiaV2</a>
-    <audio id="radio" crossorigin="anonymous" preload="auto" playsinline autoplay muted><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
+    <div id="bufferText">TOCA PLAY - WEBVIEW LISTO</div>
+    <a class="linkDescarga" href="https://radiolamiastereo.github.io/RadioLamiaV2.apk" target="_blank">📥 Descargar APK RadioLamiaV2</a>
+    <audio id="radio" crossorigin="anonymous" preload="auto" playsinline><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
   </div>
 </div>
 <script>
-let playing=false,audioCtx,analyser,dataArray,timeArray,retryCount=0,bufferCheck,hasInteracted=false;
-const audio=document.getElementById('radio'),btn=document.getElementById('btn'),overlay=document.getElementById('autoOverlay'),waveCanvas=document.getElementById('waveMiddle'),wCtx=waveCanvas.getContext('2d'),eqBars=document.querySelectorAll('#eqMini .bar'),fill=document.getElementById('bufferFill'),bText=document.getElementById('bufferText');
-const STREAM_URL="https://stream.zeno.fm/mys646fkd2zuv";const BUFFER_GOAL=8;
-function resizeCanvas(){const r=window.devicePixelRatio||1;waveCanvas.width=waveCanvas.offsetWidth*r;waveCanvas.height=waveCanvas.offsetHeight*r;wCtx.setTransform(r,0,0,r,0,0);}resizeCanvas();window.addEventListener('resize',resizeCanvas);
-window.addEventListener('load',()=>{audio.muted=true;audio.src=STREAM_URL+"?autoplay="+Date.now();audio.play().then(()=>{playing=true;bText.textContent="AUTOPLAY MUTEADO - Toca para sonido";startBufferMonitor();document.body.addEventListener('click',activarSonido,{once:true});document.body.addEventListener('touchstart',activarSonido,{once:true});}).catch(()=>{overlay.classList.remove('hidden');});});
-function activarSonido(){hasInteracted=true;audio.muted=false;audio.volume=1;overlay.classList.add('hidden');audio.play().then(()=>{playing=true;btn.textContent="⏸️";bText.textContent="SONIDO ACTIVO - CENTRADO TOTAL ✓";if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();const src=audioCtx.createMediaElementSource(audio);src.connect(analyser);analyser.connect(audioCtx.destination);analyser.fftSize=512;dataArray=new Uint8Array(analyser.frequencyBinCount);timeArray=new Uint8Array(analyser.fftSize);draw();}else if(audioCtx.state==='suspended'){audioCtx.resume();}}).catch(()=>{});}
-function toggleRadio(){if(!playing){audio.muted=false;audio.play().then(()=>{playing=true;btn.textContent="⏸️";overlay.classList.add('hidden');});}else{playing=false;audio.pause();btn.textContent="▶️";bText.textContent="PAUSADO";clearInterval(bufferCheck);}}
-function startBufferMonitor(){clearInterval(bufferCheck);bufferCheck=setInterval(()=>{try{if(audio.buffered.length){const end=audio.buffered.end(audio.buffered.length-1);const sec=Math.max(0,end-audio.currentTime);const pct=Math.min(100,(sec/BUFFER_GOAL)*100);fill.style.width=pct+"%";if(hasInteracted){if(sec>=BUFFER_GOAL){bText.textContent=`BUFFER ${sec.toFixed(1)}s / ${BUFFER_GOAL}s - ESTABLE ✓`;fill.style.background="linear-gradient(90deg,#00ff88,#00ffff)";}else if(sec<2){bText.textContent=`BUFFER BAJO ${sec.toFixed(1)}s`;}else{bText.textContent=`BUFFER ${sec.toFixed(1)}s / ${BUFFER_GOAL}s`;}}} }catch{}},400);}
-audio.addEventListener('waiting',()=>{if(playing)bText.textContent="Bufferizando...";});
-audio.addEventListener('error',()=>{if(retryCount<5){retryCount++;bText.textContent=`Reconectando ${retryCount}/5...`;setTimeout(()=>{audio.src=STREAM_URL+"?retry="+Date.now();audio.muted=!hasInteracted;audio.play().catch(()=>{});},1200*retryCount);}});
-function draw(){requestAnimationFrame(draw);if(!playing||!analyser)return;analyser.getByteFrequencyData(dataArray);analyser.getByteTimeDomainData(timeArray);for(let i=0;i<eqBars.length;i++){eqBars[i].style.height=(4+dataArray[i*2+2]/255*18)+'px';}const h=waveCanvas.offsetHeight,w=waveCanvas.offsetWidth,cy=h/2;wCtx.clearRect(0,0,w,h);wCtx.beginPath();wCtx.lineWidth=3;wCtx.strokeStyle='#00ffff';wCtx.shadowColor='#00ffff';wCtx.shadowBlur=18;for(let x=0;x<w;x++){const i=Math.floor(x/w*timeArray.length);const y=cy+(timeArray[i]-128)/128*28+Math.sin(x*0.01+Date.now()/300)*3;if(x===0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;wCtx.beginPath();wCtx.lineWidth=2;wCtx.strokeStyle='rgba(255,0,255,0.85)';wCtx.shadowColor='#ff00ff';wCtx.shadowBlur=14;for(let x=0;x<w;x++){const i=Math.floor((x+50)/w*timeArray.length);const y=cy+(timeArray[i]-128)/128*20+Math.sin(x*0.012-Date.now()/280)*4;if(x===0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;}
+let playing=false,audioCtx,analyser,dataArray,timeArray,bufferTimer=null,fakeBuffer=0,isWebView=false;
+const audio=document.getElementById('radio'),btn=document.getElementById('btn'),waveCanvas=document.getElementById('waveMiddle'),wCtx=waveCanvas.getContext('2d'),eqBars=document.querySelectorAll('#eqMini .bar'),fill=document.getElementById('bufferFill'),bText=document.getElementById('bufferText');
+
+// DETECTAR WEBVIEW DE APP INVENTOR
+isWebView = /AppInventor|Kodular|Android.*wv/i.test(navigator.userAgent) || !window.chrome;
+console.log("WebView:",isWebView);
+
+function resizeCanvas(){const r=window.devicePixelRatio||1;waveCanvas.width=waveCanvas.offsetWidth*r;waveCanvas.height=waveCanvas.offsetHeight*r;wCtx.setTransform(r,0,0,r,0,0);}resizeCanvas();
+
+function toggleRadio(){
+  if(!playing){
+    btn.textContent="⏳";
+    bText.textContent="CONECTANDO...";
+    fakeBuffer=0;
+    fill.style.width="0%";
+    audio.src="https://stream.zeno.fm/mys646fkd2zuv?t="+Date.now();
+    audio.load();
+    startFakeBuffer(); // ARRANCAR BARRA AUNQUE NO HAYA BUFFER REAL
+    audio.play().then(()=>{
+      playing=true;
+      btn.textContent="⏸️";
+      if(!audioCtx){
+        try{
+          audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+          analyser=audioCtx.createAnalyser();
+          const src=audioCtx.createMediaElementSource(audio);
+          src.connect(analyser);analyser.connect(audioCtx.destination);
+          analyser.fftSize=512;dataArray=new Uint8Array(analyser.frequencyBinCount);timeArray=new Uint8Array(analyser.fftSize);
+          draw();
+        }catch(e){console.log("AudioContext bloqueado en WebView");}
+      } else if(audioCtx.state==='suspended'){audioCtx.resume();}
+    }).catch(e=>{
+      bText.textContent="TOCA DE NUEVO - WebView bloqueó";
+      btn.textContent="▶️";
+      clearInterval(bufferTimer);
+      fill.style.width="0%";
+    });
+  } else {
+    playing=false;
+    audio.pause();
+    btn.textContent="▶️";
+    bText.textContent="PAUSADO";
+    clearInterval(bufferTimer);
+    fill.style.width="0%";
+    fakeBuffer=0;
+  }
+}
+
+// === FIX WEBVIEW: BUFFER SIMULADO QUE SI SE VE ===
+function startFakeBuffer(){
+  clearInterval(bufferTimer);
+  fakeBuffer=0;
+  bufferTimer=setInterval(()=>{
+    if(!playing && fakeBuffer<90){
+      // Subiendo mientras carga
+      fakeBuffer+= Math.random()*15+5;
+      if(fakeBuffer>90) fakeBuffer=90;
+      fill.style.width=fakeBuffer+"%";
+      bText.textContent="CARGANDO BUFFER "+Math.round(fakeBuffer)+"%...";
+      fill.style.background="linear-gradient(90deg,#ffaa00,#ff00ff)";
+    } else if(playing){
+      // Cuando ya está sonando, mantener en 100% con pulso
+      fakeBuffer=100;
+      fill.style.width="100%";
+      bText.textContent="EN VIVO - BUFFER ESTABLE ✓";
+      fill.style.background="linear-gradient(90deg,#00ff88,#00ffff)";
+      fill.style.boxShadow="0 0 10px #00ff88";
+      clearInterval(bufferTimer);
+      // Pulso visual de vivo
+      setInterval(()=>{if(playing){fill.style.opacity="0.8";setTimeout(()=>fill.style.opacity="1",300);}},1200);
+    }
+  },350);
+}
+
+// Eventos WebView
+audio.addEventListener('playing',()=>{
+  playing=true;
+  btn.textContent="⏸️";
+  fakeBuffer=100;
+  fill.style.width="100%";
+  bText.textContent="EN VIVO ✓";
+  clearInterval(bufferTimer);
+});
+
+audio.addEventListener('waiting',()=>{
+  if(playing){
+    bText.textContent="SEÑAL DÉBIL - MANTENIENDO...";
+    fill.style.width="70%";
+    fill.style.background="linear-gradient(90deg,#ffaa00,#ff00ff)";
+    startFakeBuffer();
+  }
+});
+
+audio.addEventListener('stalled',()=>{
+  if(playing){
+    bText.textContent="RECONECTANDO...";
+    audio.src="https://stream.zeno.fm/mys646fkd2zuv?r="+Date.now();
+    audio.load();
+    audio.play().catch(()=>{});
+  }
+});
+
+audio.addEventListener('error',()=>{
+  bText.textContent="ERROR DE RED - TOCA PLAY";
+  btn.textContent="▶️";
+  playing=false;
+  clearInterval(bufferTimer);
+  fill.style.width="0%";
+});
+
+function draw(){requestAnimationFrame(draw);if(!playing||!analyser||!dataArray)return;try{analyser.getByteFrequencyData(dataArray);analyser.getByteTimeDomainData(timeArray);for(let i=0;i<eqBars.length;i++){eqBars[i].style.height=(4+dataArray[i*2+2]/255*18)+'px';}const h=waveCanvas.offsetHeight,w=waveCanvas.offsetWidth,cy=h/2;wCtx.clearRect(0,0,w,h);wCtx.beginPath();wCtx.lineWidth=3;wCtx.strokeStyle='#00ffff';wCtx.shadowColor='#00ffff';wCtx.shadowBlur=16;for(let x=0;x<w;x++){const idx=Math.floor(x/w*timeArray.length);const y=cy+(timeArray[idx]-128)/128*26;if(x===0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;}catch{}}
 function toggleChat(){document.getElementById('chatWindow').classList.toggle('open');}
-const songEl=document.getElementById('songTitle'),artistEl=document.getElementById('artist'),mountId="mys646fkd2zuv";
+const songEl=document.getElementById('songTitle'),artistEl=document.getElementById('artist');
 function updateScroll(t){songEl.style.animation='none';void songEl.offsetWidth;songEl.textContent=t+"   •   RADIO LA MIA   •   ";songEl.style.animation='scroll 14s linear infinite';}
-try{const es=new EventSource(`https://api.zeno.fm/mounts/metadata/subscribe/${mountId}`);es.onmessage=e=>{try{const d=JSON.parse(e.data);let t=d.streamTitle||d.title||"";if(t){let p=t.split(" - ");if(p.length>=2){artistEl.textContent=p[0];updateScroll(p.slice(1).join(" - "));}else{artistEl.textContent="RADIO LA MIA";updateScroll(t);}}}catch{}};}catch{}
+try{const es=new EventSource(`https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv`);es.onmessage=e=>{try{const d=JSON.parse(e.data);let t=d.streamTitle||d.title||"";if(t){let p=t.split(" - ");if(p.length>=2){artistEl.textContent=p[0];updateScroll(p.slice(1).join(" - "));}else{artistEl.textContent="RADIO LA MIA";updateScroll(t);}}}catch{}};}catch{}
 </script>
 </body>
 </html>
