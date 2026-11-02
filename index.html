@@ -2,121 +2,137 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RADIO LA MIA STEREO ONLINE - DJ ALFA - CHAT OFICIAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RADIO LA MIA STEREO ONLINE - DJ ALFA - RESPONSIVO</title>
 <style>
-body{margin:0;background:#050816;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:Arial;overflow:hidden}
-.player{width:94%;max-width:420px;background:#0a0a1f;border:2px solid #00ffff;border-radius:24px;overflow:hidden;box-shadow:0 0 25px #00ffff,0 0 50px #ff00ff66;text-align:center;color:#fff;position:relative}
-.img-box{height:540px;position:relative;overflow:hidden;background:#000}
+*{box-sizing:border-box}
+body{margin:0;background:#050816;display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100dvh;font-family:Arial;overflow:hidden}
+.player{width:94%;max-width:420px;background:#0a0a1f;border:2px solid #00ffff;border-radius:24px;overflow:hidden;box-shadow:0 0 25px #00ffff,0 0 50px #ff00ff66;text-align:center;color:#fff;position:relative;display:flex;flex-direction:column}
+.img-box{height:540px;position:relative;overflow:hidden;background:#000;flex-shrink:0}
 .img-box img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
 .titles{position:absolute;top:14px;left:0;right:0;z-index:4}
 .titles h1{margin:0;color:#aaffff;font-size:19px;text-shadow:0 0 12px #00ffff,0 0 25px #ff00ff}
 .titles h2{margin:2px 0 0;color:#fff;font-size:12px;letter-spacing:4px;background:#00000066;display:inline-block;padding:3px 10px;border-radius:20px;border:1px solid #ff00ff55}
-.djname{position:absolute;bottom:100px;left:0;right:0;color:#fff;font-weight:bold;font-size:26px;text-shadow:0 0 15px #ff00ff,0 0 30px #00ffff;z-index:4}
+.djname{position:absolute;bottom:100px;left:0;right:0;color:#fff;font-weight:bold;font-size:26px;text-shadow:0 0 15px #ff00ff,0 0 30px #00ffff;z-index:5}
 .content{padding:12px;background:linear-gradient(180deg,#0f0c29,#1e1440)}
-.now{margin:0 0 12px;padding:10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55}
-#songTitle{color:#fff;font-weight:bold;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#artist{color:#ff7bff;font-size:11px}
+.now{margin:0 0 4px;padding:10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55;overflow:hidden}
+#songTitleWrap{overflow:hidden;white-space:nowrap;position:relative;height:18px}
+#songTitle{display:inline-block;padding-left:100%;white-space:nowrap;font-weight:bold;font-size:13px;color:#fff;text-shadow:0 0 8px #00ffff;animation:scroll 14s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+#artist{color:#ff7bff;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eq-mini{display:flex;justify-content:center;align-items:end;gap:3px;height:22px;margin:8px 0 6px}
+.eq-mini .bar{width:4px;height:6px;background:linear-gradient(to top,#00ffff,#ff00ff);border-radius:2px 2px 0 0;transition:height 0.08s}
 .btns{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:4px}
 .play{border:3px solid #ff00ff;background:radial-gradient(circle,#2a2a5a,#0a0a1f);width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 0 20px #ff00ff;color:#fff;z-index:5}
 .chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff;position:relative}
-.chatBtn .notif{position:absolute;top:-4px;right:-4px;background:#ff00ff;color:#fff;font-size:9px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px #ff00ff}
 canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
-#waveCanvas{top:0;height:100%}
-
-/* CHAT CBOX */
+#waveMiddle{top:50%;height:90px;transform:translateY(-50%)}
 .chatWindow{position:absolute;bottom:0;left:0;right:0;height:88%;background:#0a0a1f;border-top:2px solid #00ffff;border-radius:20px 20px 0 0;z-index:30;transform:translateY(100%);transition:transform 0.35s ease;display:flex;flex-direction:column}
 .chatWindow.open{transform:translateY(0)}
 .chatHeader{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,#0a0a1f,#1e1440);border-bottom:1px solid #00ffff55;border-radius:20px 20px 0 0}
-.chatHeader h3{margin:0;color:#00ffff;font-size:13px;letter-spacing:1px}
+.chatHeader h3{margin:0;color:#00ffff;font-size:13px}
 .chatHeader small{color:#ff7bff;font-size:9px;display:block}
 .closeChat{background:none;border:1px solid #ff00ff;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer}
 .chatFrame{flex:1;border:none;width:100%;background:#fff}
 .onlineDot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 8px #00ff00;display:inline-block;margin-right:4px}
+
+/* ===== RESPONSIVO CELULAR ===== */
+@media (max-width:600px){
+  body{padding:0;background:#000}
+  .player{width:100%;max-width:100%;height:100vh;height:100dvh;border:none;border-radius:0;box-shadow:none}
+  .img-box{height:62vh;height:62dvh}
+  .titles h1{font-size:22px}
+  .djname{font-size:28px;bottom:18%}
+  .content{flex:1;padding:14px 12px 18px;display:flex;flex-direction:column;justify-content:center}
+  .now{padding:12px}
+  #songTitle{font-size:14px}
+  .eq-mini{height:28px;gap:4px}
+  .eq-mini .bar{width:5px}
+  .play,.chatBtn{width:78px;height:78px;font-size:30px}
+  .chatWindow{height:92%}
+}
+
+/* ===== RESPONSIVO TABLET ===== */
+@media (min-width:601px) and (max-width:1024px){
+  .player{max-width:480px}
+  .img-box{height:580px}
+}
+
+/* ===== RESPONSIVO PC ESCRITORIO ===== */
+@media (min-width:1025px){
+  body{background:radial-gradient(ellipse at center,#1a1a3a 0%,#050816 70%);padding:20px}
+  .player{max-width:460px;border-width:3px;box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff55,0 20px 60px #000}
+  .img-box{height:600px}
+  .titles h1{font-size:24px;letter-spacing:1px}
+  .djname{font-size:32px;letter-spacing:1px}
+  .content{padding:18px}
+  #songTitle{font-size:15px}
+  .eq-mini{height:30px;gap:5px}
+  .eq-mini .bar{width:6px}
+  .play,.chatBtn{width:80px;height:80px;font-size:32px;transition:transform 0.2s}
+  .play:hover,.chatBtn:hover{transform:scale(1.08);box-shadow:0 0 30px #ff00ff}
+  /* En PC el chat se ve como panel lateral */
+  .chatWindow{height:88%;border:2px solid #00ffff;border-radius:20px;bottom:10px;left:10px;right:10px;transform:translateY(120%)}
+  .chatWindow.open{transform:translateY(0)}
+}
+
+/* ===== PANTALLAS MUY ALTAS (celulares largos) ===== */
+@media (max-height:700px) and (max-width:600px){
+  .img-box{height:55vh}
+  .djname{bottom:12%;font-size:24px}
+}
 </style>
 </head>
 <body>
 <div class="player">
   <div class="img-box" id="imgBox">
     <img src="dj.jpg" alt="RADIO LA MIA STEREO ONLINE">
-    <canvas id="waveCanvas"></canvas>
+    <canvas id="waveMiddle"></canvas>
     <div class="titles"><h1>RADIO LA MIA STEREO</h1><h2>ONLINE</h2></div>
     <div class="djname">DJ ALFA EN VIVO</div>
-
-    <!-- VENTANA CHAT CBOX -->
     <div class="chatWindow" id="chatWindow">
-      <div class="chatHeader">
-        <div><h3><span class="onlineDot"></span>CHAT OFICIAL EN VIVO</h3><small>RADIO LA MIA STEREO ONLINE • DJ ALFA</small></div>
-        <button class="closeChat" onclick="toggleChat()">✕</button>
-      </div>
+      <div class="chatHeader"><div><h3><span class="onlineDot"></span>CHAT OFICIAL EN VIVO</h3><small>RADIO LA MIA STEREO ONLINE • DJ ALFA</small></div><button class="closeChat" onclick="toggleChat()">✕</button></div>
       <iframe class="chatFrame" src="https://my.cbox.ws/Chat-Radio-La-Mia-st" title="Chat Radio La Mia"></iframe>
     </div>
   </div>
-
   <div class="content">
-    <div class="now"><small style="color:#00ffff;font-size:8px;letter-spacing:2px">♪ TEMA ACTUAL EN VIVO</small><div id="songTitle">Toca Play para activar ondas</div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
-    <div class="btns">
-      <button class="play" id="btn" onclick="toggleRadio()">▶️</button>
-      <button class="chatBtn" onclick="toggleChat()">💬<span class="notif">1</span></button>
-    </div>
-    <p id="status" style="font-size:9px;color:#aaa;margin-top:8px"><span class="onlineDot"></span>ONDAS CIRCULARES AL SON + CHAT OFICIAL</p>
+    <div class="now"><small style="color:#00ffff;font-size:8px;letter-spacing:2px">♪ TEMA ACTUAL EN VIVO</small><div id="songTitleWrap"><div id="songTitle">Toca Play para activar ondas • RADIO LA MIA STEREO ONLINE • DJ ALFA EN VIVO</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
+    <div class="eq-mini" id="eqMini"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">▶️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
+    <p id="status" style="font-size:9px;color:#aaa;margin-top:8px"><span class="onlineDot"></span> RESPONSIVO • CELULAR Y PC • DJ ALFA</p>
     <audio id="radio" crossorigin="anonymous" preload="none"><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
   </div>
 </div>
 
 <script>
-// AUDIO + SOLO ONDAS CIRCULARES QUE LATEN AL SON
-let playing=false,audioCtx,analyser,dataArray;
+let playing=false,audioCtx,analyser,dataArray,timeArray;
 const audio=document.getElementById('radio'),btn=document.getElementById('btn');
-const waveCanvas=document.getElementById('waveCanvas'),waveCtx=waveCanvas.getContext('2d');
-function resize(){waveCanvas.width=waveCanvas.offsetWidth;waveCanvas.height=waveCanvas.offsetHeight;}
+const waveCanvas=document.getElementById('waveMiddle'),wCtx=waveCanvas.getContext('2d');
+const eqBars=document.querySelectorAll('#eqMini .bar');
+function resize(){waveCanvas.width=waveCanvas.offsetWidth*2;waveCanvas.height=waveCanvas.offsetHeight*2;}
 window.addEventListener('resize',resize);resize();
 function toggleRadio(){
  if(!playing){
-  audio.play().then(()=>{btn.textContent="⏸️";playing=true;document.getElementById('status').innerHTML='<span class="onlineDot"></span>🔊 ONDAS CIRCULARES ON';
-    if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();const s=audioCtx.createMediaElementSource(audio);s.connect(analyser);analyser.connect(audioCtx.destination);analyser.fftSize=256;dataArray=new Uint8Array(analyser.frequencyBinCount);draw();}
-  });
+  audio.play().then(()=>{btn.textContent="⏸️";playing=true;if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();const src=audioCtx.createMediaElementSource(audio);src.connect(analyser);analyser.connect(audioCtx.destination);analyser.fftSize=512;dataArray=new Uint8Array(analyser.frequencyBinCount);timeArray=new Uint8Array(analyser.fftSize);draw();}});
  }else{audio.pause();btn.textContent="▶️";playing=false;}
 }
 function draw(){
- requestAnimationFrame(draw); if(!playing) return;
- analyser.getByteFrequencyData(dataArray);
- const bass=(dataArray[2]+dataArray[3]+dataArray[4]+dataArray[5])/4; // bajos fuertes
- const mid=(dataArray[20]+dataArray[30])/2;
- waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
- const cx=waveCanvas.width/2,cy=waveCanvas.height/2;
- // 4 ondas circulares neón que se expanden con los bajos
- for(let i=0;i<4;i++){
-   const base = 70 + i*55;
-   const pulse = bass * 0.9; // late con los bajos
-   const r = base + pulse + Math.sin(Date.now()/400 + i)*6;
-   waveCtx.beginPath();
-   waveCtx.arc(cx, cy, r, 0, Math.PI*2);
-   waveCtx.strokeStyle = i%2==0 ? `rgba(0,255,255,${0.7 - i*0.12})` : `rgba(255,0,255,${0.7 - i*0.12})`;
-   waveCtx.lineWidth = 2.5 + bass/40;
-   waveCtx.shadowColor = i%2==0 ? '#00ffff' : '#ff00ff';
-   waveCtx.shadowBlur = 12;
-   waveCtx.stroke();
-   waveCtx.shadowBlur = 0;
- }
- // Onda tipo sonido horizontal suave
- waveCtx.beginPath();
- for(let x=0;x<waveCanvas.width;x+=3){
-   const y = cy + Math.sin(x*0.015 + Date.now()/250)* (mid/5);
-   if(x==0) waveCtx.moveTo(x,y); else waveCtx.lineTo(x,y);
- }
- waveCtx.strokeStyle='rgba(0,255,255,0.35)'; waveCtx.lineWidth=1.5; waveCtx.stroke();
+ requestAnimationFrame(draw);if(!playing)return;
+ analyser.getByteFrequencyData(dataArray);analyser.getByteTimeDomainData(timeArray);
+ for(let i=0;i<eqBars.length;i++){const v=dataArray[i*3+2]/255;eqBars[i].style.height=(4+v*18)+'px';}
+ wCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
+ const h=waveCanvas.height,w=waveCanvas.width,cy=h/2;
+ wCtx.beginPath();wCtx.lineWidth=3;wCtx.strokeStyle='#00ffff';wCtx.shadowColor='#00ffff';wCtx.shadowBlur=18;
+ for(let x=0;x<w;x++){const i=Math.floor((x/w)*timeArray.length);const v=(timeArray[i]-128)/128;const bass=dataArray[5]/70;const y=cy+v*(30+bass*18)+Math.sin(x*0.01+Date.now()/300)*3;if(x==0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;
+ wCtx.beginPath();wCtx.lineWidth=2;wCtx.strokeStyle='rgba(255,0,255,0.85)';wCtx.shadowColor='#ff00ff';wCtx.shadowBlur=14;
+ for(let x=0;x<w;x++){const i=Math.floor((x/w)*timeArray.length);const v=(timeArray[i+50]-128)/128;const y=cy+v*22+Math.sin(x*0.012-Date.now()/280)*4;if(x==0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;
 }
-function toggleChat(){
-  const w=document.getElementById('chatWindow');
-  w.classList.toggle('open');
-  const notif=document.querySelector('.notif');
-  if(notif && w.classList.contains('open')) notif.style.display='none';
-}
+function toggleChat(){document.getElementById('chatWindow').classList.toggle('open');}
 const songEl=document.getElementById('songTitle'),artistEl=document.getElementById('artist'),mountId="mys646fkd2zuv";
+function updateScroll(text){songEl.style.animation='none';songEl.offsetHeight;songEl.textContent=text+"   •   "+text+"   •   RADIO LA MIA STEREO ONLINE   •   ";songEl.style.animation='scroll 14s linear infinite';songEl.style.animationDuration=text.length>40?'10s':text.length<20?'18s':'14s';}
 try{
   const es=new EventSource(`https://api.zeno.fm/mounts/metadata/subscribe/${mountId}`);
-  es.onmessage=e=>{try{const d=JSON.parse(e.data);let t=d.streamTitle||d.title||"";if(t){let p=t.split(" - ");if(p.length>=2){artistEl.textContent=p[0];songEl.textContent=p.slice(1).join(" - ");}else{songEl.textContent=t;}}}catch{}};
+  es.onmessage=e=>{try{const d=JSON.parse(e.data);let t=d.streamTitle||d.title||"";if(t){let p=t.split(" - ");if(p.length>=2){artistEl.textContent=p[0];updateScroll(p.slice(1).join(" - "));}else{artistEl.textContent="RADIO LA MIA STEREO ONLINE";updateScroll(t);}}}catch{}};
 }catch{}
 </script>
 </body>
