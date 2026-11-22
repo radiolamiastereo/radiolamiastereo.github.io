@@ -36,10 +36,8 @@ body{
 .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,#0a0c22 100%)}
 .cover-info{position:absolute;left:14px;bottom:12px;z-index:2;right:14px}
 .cover-info h1{font-size:22px;line-height:1;text-transform:uppercase;letter-spacing:.5px;text-shadow:0 2px 10px #000}
-.cover-info p{font-size:12px;color:#00e5ff;margin-top:4px;font-weight:700}
+.cover-info p{font-size:12px;color:#00e5ff;margin-top:4px;font-weight:700;letter-spacing:2px}
 .live-tag{position:absolute;top:12px;right:12px;z-index:2;background:#000000aa;padding:5px 10px;border-radius:99px;font-size:10px;letter-spacing:1px}
-
-/* NOMBRE EN TIEMPO REAL EN VAIVÉN */
 .marquee{overflow:hidden;white-space:nowrap;margin:14px 16px 0;height:22px;display:flex;align-items:center;justify-content:center}
 .marquee span{
   display:inline-block;will-change:transform;
@@ -54,7 +52,6 @@ body{
 }
 .marquee span.corto{animation:none}
 .marquee span.sin-datos{color:#ffcc00;animation:none}
-
 .eq{display:flex;align-items:end;justify-content:center;gap:4px;height:32px;margin:14px 0 6px}
 .eq i{display:block;width:5px;height:8px;background:linear-gradient(180deg,var(--c1),var(--c2));border-radius:4px;transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate}
 .eq i:nth-child(2n){animation-delay:.15s}.eq i:nth-child(3n){animation-delay:.3s}.eq i:nth-child(4n){animation-delay:.45s}
@@ -98,7 +95,7 @@ body{
   <div class="cover">
     <img src="https://radiolamiastereo.github.io/logo.webp" onerror="this.src='https://radiolamiastereo.github.io/logo.png'" alt="Radio La Mia" fetchpriority="high" decoding="async">
     <div class="live-tag">GUAYAQUIL • EC</div>
-    <div class="cover-info"><h1>Radio La Mia<br>Stereo</h1><p>DJ ALFA • LA TUYA, LA MÍA</p></div>
+    <div class="cover-info"><h1>Radio La Mia<br>Stereo</h1><p>DJ ALFA</p></div>
   </div>
 
   <div class="marquee"><span id="song">🎵 CONECTANDO CON ZENO... 🎵</span></div>
@@ -143,17 +140,14 @@ document.querySelectorAll('.tip').forEach(el=>{
   el.addEventListener('touchstart',()=>{el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500)},{passive:true});
 });
 
-// ===== CORREGIDO: NOMBRE REAL DESDE ZENO CON EventSource =====
+// ===== NOMBRE REAL DESDE ZENO CON EventSource =====
 let songEl=document.getElementById('song');
 let lastSong='';
 function setSong(txt){
   txt=(txt||'').trim();
-  // Limpia cosas que manda Zeno como " - " o nombre de la radio repetido
   if(!txt) return;
   if(txt===lastSong) return;
-  // Si Zeno manda solo "Radio La Mia Stereo", no lo muestres como canción
   if(txt.toLowerCase().includes('radio la mia') && txt.length < 30){
-    // Lo dejamos como texto de espera, no como canción
     songEl.textContent='🎵 RADIO LA MIA STEREO - EN VIVO 🎵';
     songEl.classList.add('corto');
     return;
@@ -167,42 +161,25 @@ function setSong(txt){
   songEl.style.animation='';
   document.title = txt + ' - Radio La Mia Stereo';
 }
-
 function conectarZeno(){
-  // 1. MÉTODO OFICIAL ZENO: SSE - https://api.zeno.fm/mounts/metadata/subscribe/TU_MOUNT
-  // Tu mount es mys646fkd2zuv - es el mismo que usas en el stream
   let es = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv');
-  
   es.onmessage = (e)=>{
     try{
       let data = JSON.parse(e.data);
-      // Zeno manda varias formas: streamTitle, title, song, etc. Probamos todas
       let titulo = data.streamTitle || data.title || data.song || data.now_playing || '';
       if(typeof titulo === 'object') titulo = titulo.title || titulo.song || '';
       if(titulo) setSong(titulo);
-      // A veces viene en: { metadata: { streamTitle: ... } }
       if(data.metadata && data.metadata.streamTitle) setSong(data.metadata.streamTitle);
     }catch(err){
-      // Si no es JSON, es texto plano: "Artista - Canción"
       if(e.data && e.data.length > 2 && !e.data.includes('{')) setSong(e.data);
     }
   };
   es.onerror = ()=>{
-    // Si se corta, reintenta en 5 seg con el método 2
     es.close();
     songEl.textContent='🎵 RADIO LA MIA STEREO - EN VIVO 🎵';
     setTimeout(conectarZeno, 5000);
   };
 }
 conectarZeno();
-
-// 2. RESPALDO: Si tu navegador bloquea EventSource, intenta leer el ICY del stream cada 20 seg
-setInterval(async()=>{
-  if(lastSong) return; // Si ya tenemos canción por EventSource, no gastar datos
-  try{
-    let r=await fetch('https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv', {headers:{'Accept':'text/event-stream'}});
-    // No hacemos nada, solo es para mantener vivo
-  }catch(e){}
-},20000);
 </script>
 </body></html>
