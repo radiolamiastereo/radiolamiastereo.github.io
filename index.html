@@ -11,9 +11,9 @@
 html,body{height:100%}
 body{
   background:
-  radial-gradient(600px 300px at 20% 0%, #ff00aa22 0%, transparent 60%),
-  radial-gradient(600px 300px at 90% 100%, #00e5ff22 0%, transparent 60%),
-  var(--bg);
+  radial-gradient(600px 300px at 20% 0%, #00e5ff55 0%, transparent 60%),
+  radial-gradient(600px 300px at 90% 100%, #ff00aa33 0%, transparent 60%),
+  linear-gradient(180deg,#00e5ff 0%, #004466 28%, #02030a 62%, #000000 100%);
   font-family:system-ui,-apple-system,Arial;
   display:grid;place-items:center;
   overflow:hidden;color:#fff;
@@ -81,46 +81,68 @@ body{
 .actions .dl{background:#00ff88;color:#04120a;border:none}
 .footer{text-align:center;font-size:10px;color:#555;padding-bottom:10px;letter-spacing:1px}
 
-/* ===== CHAT SUBE Y BAJA IGUAL DE SUAVE ===== */
+/* ===== CHAT - SIN BLANCO A LOS LADOS - RECORTE DEL BLANCO DE CBOX ===== */
 .chat-panel{
-  position:absolute;left:0;right:0;
-  top:0;bottom:196px;
-  background:#0a0c22;z-index:50;
+  position:fixed;left:0;right:0;top:0;bottom:0;
+  width:100%;height:100dvh;height:100svh;
+  background:
+  radial-gradient(500px 220px at 50% 0%, #00e5ff66 0%, transparent 65%),
+  linear-gradient(180deg,#00e5ff 0%, #005a7a 22%, #02030a 58%, #000000 100%);
+  z-index:999;
   display:flex;flex-direction:column;
   transform:translateY(105%);
-  /* Al bajar: primero baja suave 0.45s, y RECIÉN al final se esconde */
   transition:transform .45s cubic-bezier(.2,.9,.3,1), visibility 0s linear .45s;
-  border-radius:0 0 22px 22px;
-  border-bottom:1px solid #ffffff22;
-  box-shadow:0 10px 40px #00000088;
   visibility:hidden;
   will-change:transform;
+  overflow:hidden;
 }
 .chat-panel.open{
   transform:translateY(0);
   visibility:visible;
-  /* Al subir: se muestra al instante y sube suave 0.45s */
   transition:transform .45s cubic-bezier(.2,.9,.3,1), visibility 0s linear 0s;
 }
 .chat-head{
-  padding:10px 12px 10px;display:flex;align-items:center;gap:10px;
-  background:linear-gradient(90deg,#00e5ff22,#ff00aa22);
-  border-bottom:1px solid #ffffff1a;
+  padding:12px;display:flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,#00e5ff33,#ff00aa22);
+  border-bottom:1px solid #ffffff22;
+  flex-shrink:0;
+  padding-top:max(12px, env(safe-area-inset-top));
 }
-.chat-head b{font-size:13px;letter-spacing:.5px;flex:1}
+.chat-head b{font-size:13px;letter-spacing:.5px;flex:1;text-shadow:0 1px 8px #000}
 .chat-head span{font-size:11px;color:#00ff88}
+.chat-mini-play{
+  width:40px;height:40px;border-radius:50%;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,#00e5ff,#ff00aa);color:#fff;font-size:17px;cursor:pointer;
+  display:grid;place-items:center;
+  box-shadow:0 0 14px #00e5ff88;
+}
+.chat-mini-play:active{transform:scale(.92)}
 .chat-close{
-  width:34px;height:34px;border-radius:50%;border:none;
-  background:#ffffff1a;color:#fff;font-size:16px;cursor:pointer;
+  width:40px;height:40px;border-radius:50%;border:none;flex-shrink:0;
+  background:#ffffff1a;color:#fff;font-size:17px;cursor:pointer;
   display:grid;place-items:center;
 }
 .chat-close:active{transform:scale(.9)}
-.chat-frame{flex:1;width:100%;border:none;background:#fff}
-.chat-fondo{
-  position:absolute;inset:0;bottom:196px;background:#00000055;z-index:40;
-  opacity:0;pointer-events:none;transition:opacity .45s ease;
+/* AQUÍ ESTÁ EL TRUCO: el contenedor recorta lo que sobra a los lados */
+.chat-frame-wrap{
+  flex:1;min-height:0;
+  overflow:hidden;
+  background:#000000;
+  padding:0;margin:0;
+  display:flex;flex-direction:column;
 }
-.chat-fondo.show{opacity:1;pointer-events:auto}
+/* El iframe se hace MÁS ANCHO que la pantalla y se centra, así el blanco de Cbox queda FUERA y solo se ve la parte oscura */
+.chat-frame{
+  display:block;border:none;background:#000000;
+  width:182%;
+  max-width:none;
+  margin-left:-41%;
+  height:calc(100dvh - 62px);
+  min-height:560px;
+  border-radius:0;
+  box-shadow:none;
+  padding:0;
+}
 </style></head>
 <body>
 
@@ -157,15 +179,16 @@ body{
     </div>
     <div class="footer">RADIO LA MIA STEREO © 2026 • HECHO EN GUAYAQUIL</div>
   </div>
+</div>
 
-  <div class="chat-fondo" id="chatFondo"></div>
-
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-head">
-      <span>●</span><b>CHAT EN VIVO - RADIO LA MIA</b>
-      <button class="chat-close" id="chatClose">✕</button>
-    </div>
-    <iframe id="chatFrame" class="chat-frame" src="" title="Chat en vivo" loading="lazy"></iframe>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <span>●</span><b>CHAT EN VIVO - RADIO LA MIA</b>
+    <button class="chat-mini-play" id="chatPlayBtn">▶️</button>
+    <button class="chat-close" id="chatClose">✕</button>
+  </div>
+  <div class="chat-frame-wrap" id="chatWrap">
+    <iframe id="chatFrame" class="chat-frame" src="" title="Chat en vivo" loading="lazy" scrolling="yes" allow="clipboard-write"></iframe>
   </div>
 </div>
 
@@ -175,22 +198,21 @@ body{
 let a=document.getElementById('audio'),btn=document.getElementById('playBtn'),card=document.getElementById('card'),status=document.getElementById('status'),fill=document.getElementById('fill'),vol=document.getElementById('volBtn');
 let playing=false;
 
-let chatPanel=document.getElementById('chatPanel'), chatFondo=document.getElementById('chatFondo'), chatFrame=document.getElementById('chatFrame'), chatBtn=document.getElementById('chatBtn'), chatClose=document.getElementById('chatClose');
+let chatPanel=document.getElementById('chatPanel'), chatFrame=document.getElementById('chatFrame'), chatBtn=document.getElementById('chatBtn'), chatClose=document.getElementById('chatClose'), chatPlayBtn=document.getElementById('chatPlayBtn'), chatWrap=document.getElementById('chatWrap');
 let chatCargado=false;
 function abrirChat(){
   chatPanel.classList.add('open');
-  chatFondo.classList.add('show');
+  document.body.style.overflow='hidden';
   chatBtn.textContent='💬';
   if(!chatCargado){ chatFrame.src='https://my.cbox.ws/Chat-Radio-La-Mia-st'; chatCargado=true; }
 }
 function cerrarChat(){
   chatPanel.classList.remove('open');
-  chatFondo.classList.remove('show');
+  document.body.style.overflow='';
   chatBtn.textContent='👥';
 }
 chatBtn.onclick=()=>{ if(chatPanel.classList.contains('open')) cerrarChat(); else abrirChat(); };
 chatClose.onclick=cerrarChat;
-chatFondo.onclick=cerrarChat;
 
 let canvas=document.getElementById('waveCanvas');
 let ctx=canvas.getContext('2d');
@@ -273,13 +295,15 @@ function pararOndas(){
   dibujarPlano();
 }
 
-btn.onclick=async()=>{
+async function togglePlay(){
   if(!playing){
     status.textContent='CONECTANDO...';fill.style.width='25%';
-    try{await a.play();playing=true;btn.textContent='⏸️';btn.setAttribute('data-tip','Pausar radio');card.classList.remove('paused');status.textContent='● EN VIVO - SONANDO';fill.style.width='100%';iniciarOndas();}
+    try{await a.play();playing=true;btn.textContent='⏸️';chatPlayBtn.textContent='⏸️';btn.setAttribute('data-tip','Pausar radio');card.classList.remove('paused');status.textContent='● EN VIVO - SONANDO';fill.style.width='100%';iniciarOndas();}
     catch(e){status.textContent='TOCA DE NUEVO PARA SONAR';}
-  }else{a.pause();playing=false;btn.textContent='▶️';btn.setAttribute('data-tip','Toca para escuchar');card.classList.add('paused');status.textContent='PAUSADO';fill.style.width='0%';pararOndas();}
-};
+  }else{a.pause();playing=false;btn.textContent='▶️';chatPlayBtn.textContent='▶️';btn.setAttribute('data-tip','Toca para escuchar');card.classList.add('paused');status.textContent='PAUSADO';fill.style.width='0%';pararOndas();}
+}
+btn.onclick=togglePlay;
+chatPlayBtn.onclick=togglePlay;
 vol.onclick=()=>{a.muted=!a.muted;vol.textContent=a.muted?'🔇':'🔊';vol.setAttribute('data-tip',a.muted?'Activar sonido':'Silencio / Sonido');};
 function compartir(){if(navigator.share){navigator.share({title:'Radio La Mia Stereo',text:'Escucha Radio La Mia Stereo en vivo',url:location.href})}else{prompt('Copia el link:',location.href)}}
 setInterval(()=>{document.getElementById('oyentes').textContent=(1200+Math.floor(Math.random()*80)).toLocaleString()},10000);
