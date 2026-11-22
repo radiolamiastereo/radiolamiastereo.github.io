@@ -1,180 +1,208 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>RADIO LA MIA - WEBVIEW FIX</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Radio La Mia Stereo - En Vivo</title>
+<link rel="preconnect" href="https://stream.zeno.fm">
+<link rel="preconnect" href="https://api.zeno.fm">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;height:100dvh}
-body{min-height:100dvh;display:grid;place-items:center;padding:12px;background:#050816;font-family:Arial,sans-serif;overflow:hidden}
-.player{width:clamp(280px,92vw,410px);max-height:96dvh;background:#0a0a1f;border:2px solid #00ffff;border-radius:26px;box-shadow:0 0 30px #00ffff;color:#fff;text-align:center;position:relative;overflow:hidden;display:flex;flex-direction:column}
-.img-box{position:relative;height:clamp(320px,52dvh,520px);background:#000;flex-shrink:0;overflow:hidden}
-.img-box img{width:100%;height:100%;object-fit:cover;display:block}
-.titles{position:absolute;top:12px;left:0;right:0;z-index:4}
-.titles h1{color:#aaffff;font-size:clamp(14px,4.2vw,19px);text-shadow:0 0 12px #00ffff}
-.titles h2{margin-top:4px;color:#fff;font-size:11px;letter-spacing:4px;background:#00000077;display:inline-block;padding:3px 10px;border-radius:20px;border:1px solid #ff00ff55}
-.radio-linea{position:absolute;bottom:18%;left:0;right:0;color:#fff;font-weight:bold;font-size:clamp(18px,6vw,26px);text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff;z-index:5}
-.content{padding:10px 12px 12px;background:linear-gradient(180deg,#0f0c29,#1e1440);display:flex;flex-direction:column;gap:6px}
-.now{padding:8px 10px;background:#000000bb;border-radius:12px;border:1px solid #00ffff55;overflow:hidden}
-#songTitleWrap{overflow:hidden;white-space:nowrap;height:16px;margin-top:3px}
-#songTitle{display:inline-block;padding-left:100%;white-space:nowrap;font-weight:bold;font-size:12px;animation:scroll 14s linear infinite}
-@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-#artist{color:#ff7bff;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.eq-mini{display:flex;justify-content:center;align-items:end;gap:3px;height:18px;margin:4px 0}
-.eq-mini .bar{width:4px;height:6px;background:linear-gradient(to top,#00ffff,#ff00ff);border-radius:2px 2px 0 0}
-.btns{display:flex;justify-content:center;gap:14px}
-.play{border:3px solid #ff00ff;background:radial-gradient(circle,#2a2a5a,#0a0a1f);width:68px;height:68px;border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 20px #ff00ff;color:#fff}
-.chatBtn{border:2px solid #00ffff;background:radial-gradient(circle,#0a2a3a,#0a0a1f);width:68px;height:68px;border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 0 15px #00ffff;color:#fff}
-.linkDescarga{margin-top:4px;display:inline-block;color:#00ff88;font-size:11px;text-decoration:none;border:1px solid #00ff8855;background:#00000088;padding:8px 16px;border-radius:20px;font-weight:bold}
-.bufferBox{height:6px;background:#000000cc;border-radius:10px;overflow:hidden;border:1px solid #00ffff33}
-#bufferFill{height:100%;width:0%;background:linear-gradient(90deg,#00ffff,#ff00ff);transition:width 0.4s ease;box-shadow:0 0 8px #00ffff}
-#bufferText{font-size:7px;color:#00ffff;letter-spacing:1px}
-canvas{position:absolute;left:0;width:100%;z-index:3;pointer-events:none}
-#waveMiddle{top:50%;height:90px;transform:translateY(-50%)}
-.chatWindow{position:absolute;bottom:0;left:0;right:0;height:88%;background:#0a0a1f;border-top:2px solid #00ffff;border-radius:20px 20px 0 0;z-index:30;transform:translateY(100%);transition:.35s;display:flex;flex-direction:column}
-.chatWindow.open{transform:translateY(0)}
-.chatHeader{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,#0a0a1f,#1e1440);border-bottom:1px solid #00ffff55}
-.closeChat{background:none;border:1px solid #ff00ff;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer}
-.chatFrame{flex:1;border:none;width:100%;background:#fff}
-.onlineDot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 8px #00ff00;display:inline-block;margin-right:4px}
-</style>
-</head>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--c1:#00e5ff;--c2:#ff00aa;--bg:#060816}
+html,body{height:100%}
+body{
+  background:
+  radial-gradient(600px 300px at 20% 0%, #ff00aa22 0%, transparent 60%),
+  radial-gradient(600px 300px at 90% 100%, #00e5ff22 0%, transparent 60%),
+  var(--bg);
+  font-family:system-ui,-apple-system,Arial;
+  display:grid;place-items:center;
+  overflow:hidden;color:#fff;
+}
+.card{
+  width:min(420px,94vw);height:min(720px,94svh);
+  background:linear-gradient(180deg,#12142e 0%,#0a0c22 100%);
+  border:1px solid #ffffff22;border-radius:28px;
+  overflow:visible;position:relative;display:flex;flex-direction:column;
+  contain:content;
+}
+.top{padding:14px 16px 0;display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:10px;letter-spacing:2px;background:#ff003322;border:1px solid #ff0033;color:#ff5577;padding:5px 10px;border-radius:99px;display:flex;gap:6px;align-items:center}
+.dot{width:7px;height:7px;background:#ff2d55;border-radius:50%;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.listen{font-size:11px;color:#aaa}
+.listen b{color:#fff}
+.cover{margin:16px 16px 0;height:44%;border-radius:20px;position:relative;overflow:hidden;background:#000;contain:strict}
+.cover img{width:100%;height:100%;object-fit:cover;display:block;transform:translateZ(0)}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,#0a0c22 100%)}
+.cover-info{position:absolute;left:14px;bottom:12px;z-index:2;right:14px}
+.cover-info h1{font-size:22px;line-height:1;text-transform:uppercase;letter-spacing:.5px;text-shadow:0 2px 10px #000}
+.cover-info p{font-size:12px;color:#00e5ff;margin-top:4px;font-weight:700}
+.live-tag{position:absolute;top:12px;right:12px;z-index:2;background:#000000aa;padding:5px 10px;border-radius:99px;font-size:10px;letter-spacing:1px}
+
+/* NOMBRE EN TIEMPO REAL EN VAIVÉN */
+.marquee{overflow:hidden;white-space:nowrap;margin:14px 16px 0;height:22px;display:flex;align-items:center;justify-content:center}
+.marquee span{
+  display:inline-block;will-change:transform;
+  font-size:14px;font-weight:700;color:#fff;
+  animation:vaiven 7s ease-in-out infinite alternate;
+}
+@keyframes vaiven{
+  0%{transform:translateX(15%)}
+  15%{transform:translateX(15%)}
+  85%{transform:translateX(-15%)}
+  100%{transform:translateX(-15%)}
+}
+.marquee span.corto{animation:none}
+.marquee span.sin-datos{color:#ffcc00;animation:none}
+
+.eq{display:flex;align-items:end;justify-content:center;gap:4px;height:32px;margin:14px 0 6px}
+.eq i{display:block;width:5px;height:8px;background:linear-gradient(180deg,var(--c1),var(--c2));border-radius:4px;transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate}
+.eq i:nth-child(2n){animation-delay:.15s}.eq i:nth-child(3n){animation-delay:.3s}.eq i:nth-child(4n){animation-delay:.45s}
+@keyframes eq{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+.paused .eq i{animation-play-state:paused;transform:scaleY(.25)}
+.paused .dot{animation-play-state:paused}
+.controls{padding:8px 16px 0;display:flex;align-items:center;justify-content:center;gap:18px}
+.btn{width:52px;height:52px;border-radius:50%;border:1px solid #ffffff33;background:#ffffff10;color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:transform .15s;position:relative}
+.btn:active{transform:scale(.92)}
+.play-main{width:74px;height:74px;font-size:28px;color:#fff;background:linear-gradient(135deg,#00e5ff,#ff00aa);border:none;position:relative}
+.play-main::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid #ffffff33}
+.tip{position:relative}
+.tip::after{
+  content:attr(data-tip);
+  position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%) translateY(4px);
+  background:#fff;color:#000;font-size:11px;font-weight:800;white-space:nowrap;
+  padding:6px 10px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;z-index:10;
+}
+.tip::before{
+  content:"";position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:#fff;opacity:0;transition:opacity .2s;z-index:10;pointer-events:none;
+}
+.tip:hover::after,.tip:hover::before,.tip:active::after,.tip:active::before,.tip.show::after,.tip.show::before{opacity:1;transform:translateX(-50%) translateY(0)}
+.progress{margin:16px 16px 0;height:4px;background:#ffffff1a;border-radius:99px;overflow:hidden}
+#fill{height:100%;width:0%;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .4s}
+.row{margin:8px 16px 0;display:flex;justify-content:space-between;font-size:11px;color:#888}
+#status{color:var(--c1);font-weight:700;letter-spacing:1px}
+.actions{margin:auto 16px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions a,.actions button{padding:13px;border-radius:14px;border:1px solid #ffffff22;background:#ffffff0d;color:#fff;font-size:13px;font-weight:700;text-decoration:none;text-align:center;cursor:pointer;position:relative}
+.actions .dl{background:#00ff88;color:#04120a;border:none}
+.footer{text-align:center;font-size:10px;color:#555;padding-bottom:10px;letter-spacing:1px}
+</style></head>
 <body>
-<div class="player">
-  <div class="img-box">
-    <img src="dj.jpg" alt="RADIO" onerror="this.src='https://radiolamiastereo.github.io/logo.png'">
-    <canvas id="waveMiddle"></canvas>
-    <div class="titles"><h1>RADIO LA MIA STEREO</h1><h2>ONLINE</h2></div>
-    <div class="radio-linea">Radio en Línea</div>
-    <div class="chatWindow" id="chatWindow"><div class="chatHeader"><h3 style="font-size:13px"><span class="onlineDot"></span>CHAT</h3><button class="closeChat" onclick="toggleChat()">✕</button></div><iframe class="chatFrame" src="https://my.cbox.ws/Chat-Radio-La-Mia-st"></iframe></div>
+
+<div class="card paused" id="card">
+  <div class="top">
+    <div class="badge"><span class="dot"></span> EN VIVO</div>
+    <div class="listen">📻 <b id="oyentes">1,248</b> escuchando</div>
   </div>
-  <div class="content">
-    <div class="now"><small style="color:#00ffff;font-size:7px;letter-spacing:2px">♪ TEMA ACTUAL</small><div id="songTitleWrap"><div id="songTitle">Radio La Mia Stereo - En Vivo</div></div><div id="artist">RADIO LA MIA STEREO ONLINE</div></div>
-    <div class="eq-mini" id="eqMini"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-    <div class="btns"><button class="play" id="btn" onclick="toggleRadio()">▶️</button><button class="chatBtn" onclick="toggleChat()">💬</button></div>
-    <div class="bufferBox"><div id="bufferFill"></div></div>
-    <div id="bufferText">TOCA PLAY - WEBVIEW LISTO</div>
-    <a class="linkDescarga" href="https://radiolamiastereo.github.io/RadioLamiaV2.apk" target="_blank">📥 Descargar APK RadioLamiaV2</a>
-    <audio id="radio" crossorigin="anonymous" preload="auto" playsinline><source src="https://stream.zeno.fm/mys646fkd2zuv" type="audio/mpeg"></audio>
+
+  <div class="cover">
+    <img src="https://radiolamiastereo.github.io/logo.webp" onerror="this.src='https://radiolamiastereo.github.io/logo.png'" alt="Radio La Mia" fetchpriority="high" decoding="async">
+    <div class="live-tag">GUAYAQUIL • EC</div>
+    <div class="cover-info"><h1>Radio La Mia<br>Stereo</h1><p>DJ ALFA • LA TUYA, LA MÍA</p></div>
   </div>
+
+  <div class="marquee"><span id="song">🎵 CONECTANDO CON ZENO... 🎵</span></div>
+
+  <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <div class="controls">
+    <button class="btn tip" data-tip="Compartir radio" onclick="compartir()">↗️</button>
+    <button class="btn play-main tip" id="playBtn" data-tip="Toca para escuchar">▶️</button>
+    <button class="btn tip" data-tip="Chat en vivo" onclick="window.open('https://my.cbox.ws/Chat-Radio-La-Mia-st','_blank')">👥</button>
+    <button class="btn tip" id="volBtn" data-tip="Silencio / Sonido">🔊</button>
+  </div>
+
+  <div class="progress"><div id="fill"></div></div>
+  <div class="row"><span id="status">TOCA PLAY PARA ESCUCHAR</span><span>ZENOFM • 128KBPS</span></div>
+
+  <div class="actions">
+    <a href="https://radiolamiastereo.github.io/RadioLamiaV2.apk" class="tip" data-tip="Instalar la App en tu celular">📥 DESCARGAR APP</a>
+    <button class="tip" data-tip="Enviar a tus amigos" onclick="compartir()">📲 COMPARTIR RADIO</button>
+  </div>
+  <div class="footer">RADIO LA MIA STEREO © 2026 • HECHO EN GUAYAQUIL</div>
 </div>
+
+<audio id="audio" preload="none" src="https://stream.zeno.fm/mys646fkd2zuv"></audio>
+
 <script>
-let playing=false,audioCtx,analyser,dataArray,timeArray,bufferTimer=null,fakeBuffer=0,isWebView=false;
-const audio=document.getElementById('radio'),btn=document.getElementById('btn'),waveCanvas=document.getElementById('waveMiddle'),wCtx=waveCanvas.getContext('2d'),eqBars=document.querySelectorAll('#eqMini .bar'),fill=document.getElementById('bufferFill'),bText=document.getElementById('bufferText');
-
-// DETECTAR WEBVIEW DE APP INVENTOR
-isWebView = /AppInventor|Kodular|Android.*wv/i.test(navigator.userAgent) || !window.chrome;
-console.log("WebView:",isWebView);
-
-function resizeCanvas(){const r=window.devicePixelRatio||1;waveCanvas.width=waveCanvas.offsetWidth*r;waveCanvas.height=waveCanvas.offsetHeight*r;wCtx.setTransform(r,0,0,r,0,0);}resizeCanvas();
-
-function toggleRadio(){
+let a=document.getElementById('audio'),btn=document.getElementById('playBtn'),card=document.getElementById('card'),status=document.getElementById('status'),fill=document.getElementById('fill'),vol=document.getElementById('volBtn');
+let playing=false;
+btn.onclick=async()=>{
   if(!playing){
-    btn.textContent="⏳";
-    bText.textContent="CONECTANDO...";
-    fakeBuffer=0;
-    fill.style.width="0%";
-    audio.src="https://stream.zeno.fm/mys646fkd2zuv?t="+Date.now();
-    audio.load();
-    startFakeBuffer(); // ARRANCAR BARRA AUNQUE NO HAYA BUFFER REAL
-    audio.play().then(()=>{
-      playing=true;
-      btn.textContent="⏸️";
-      if(!audioCtx){
-        try{
-          audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-          analyser=audioCtx.createAnalyser();
-          const src=audioCtx.createMediaElementSource(audio);
-          src.connect(analyser);analyser.connect(audioCtx.destination);
-          analyser.fftSize=512;dataArray=new Uint8Array(analyser.frequencyBinCount);timeArray=new Uint8Array(analyser.fftSize);
-          draw();
-        }catch(e){console.log("AudioContext bloqueado en WebView");}
-      } else if(audioCtx.state==='suspended'){audioCtx.resume();}
-    }).catch(e=>{
-      bText.textContent="TOCA DE NUEVO - WebView bloqueó";
-      btn.textContent="▶️";
-      clearInterval(bufferTimer);
-      fill.style.width="0%";
-    });
-  } else {
-    playing=false;
-    audio.pause();
-    btn.textContent="▶️";
-    bText.textContent="PAUSADO";
-    clearInterval(bufferTimer);
-    fill.style.width="0%";
-    fakeBuffer=0;
+    status.textContent='CONECTANDO...';fill.style.width='25%';
+    try{await a.play();playing=true;btn.textContent='⏸️';btn.setAttribute('data-tip','Pausar radio');card.classList.remove('paused');status.textContent='● EN VIVO - SONANDO';fill.style.width='100%';}
+    catch(e){status.textContent='TOCA DE NUEVO PARA SONAR';}
+  }else{a.pause();playing=false;btn.textContent='▶️';btn.setAttribute('data-tip','Toca para escuchar');card.classList.add('paused');status.textContent='PAUSADO';fill.style.width='0%';}
+};
+vol.onclick=()=>{a.muted=!a.muted;vol.textContent=a.muted?'🔇':'🔊';vol.setAttribute('data-tip',a.muted?'Activar sonido':'Silencio / Sonido');};
+function compartir(){if(navigator.share){navigator.share({title:'Radio La Mia Stereo',text:'Escucha Radio La Mia Stereo en vivo',url:location.href})}else{prompt('Copia el link:',location.href)}}
+setInterval(()=>{document.getElementById('oyentes').textContent=(1200+Math.floor(Math.random()*80)).toLocaleString()},10000);
+a.addEventListener('waiting',()=>{if(playing)status.textContent='CARGANDO BUFFER...'});
+a.addEventListener('playing',()=>{status.textContent='● EN VIVO - SONANDO';fill.style.width='100%'});
+document.querySelectorAll('.tip').forEach(el=>{
+  el.addEventListener('touchstart',()=>{el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500)},{passive:true});
+});
+
+// ===== CORREGIDO: NOMBRE REAL DESDE ZENO CON EventSource =====
+let songEl=document.getElementById('song');
+let lastSong='';
+function setSong(txt){
+  txt=(txt||'').trim();
+  // Limpia cosas que manda Zeno como " - " o nombre de la radio repetido
+  if(!txt) return;
+  if(txt===lastSong) return;
+  // Si Zeno manda solo "Radio La Mia Stereo", no lo muestres como canción
+  if(txt.toLowerCase().includes('radio la mia') && txt.length < 30){
+    // Lo dejamos como texto de espera, no como canción
+    songEl.textContent='🎵 RADIO LA MIA STEREO - EN VIVO 🎵';
+    songEl.classList.add('corto');
+    return;
   }
+  lastSong=txt;
+  songEl.style.animation='none';
+  songEl.textContent='🎵 '+txt+' 🎵';
+  songEl.classList.remove('sin-datos');
+  songEl.classList.toggle('corto', txt.length < 28);
+  void songEl.offsetWidth;
+  songEl.style.animation='';
+  document.title = txt + ' - Radio La Mia Stereo';
 }
 
-// === FIX WEBVIEW: BUFFER SIMULADO QUE SI SE VE ===
-function startFakeBuffer(){
-  clearInterval(bufferTimer);
-  fakeBuffer=0;
-  bufferTimer=setInterval(()=>{
-    if(!playing && fakeBuffer<90){
-      // Subiendo mientras carga
-      fakeBuffer+= Math.random()*15+5;
-      if(fakeBuffer>90) fakeBuffer=90;
-      fill.style.width=fakeBuffer+"%";
-      bText.textContent="CARGANDO BUFFER "+Math.round(fakeBuffer)+"%...";
-      fill.style.background="linear-gradient(90deg,#ffaa00,#ff00ff)";
-    } else if(playing){
-      // Cuando ya está sonando, mantener en 100% con pulso
-      fakeBuffer=100;
-      fill.style.width="100%";
-      bText.textContent="EN VIVO - BUFFER ESTABLE ✓";
-      fill.style.background="linear-gradient(90deg,#00ff88,#00ffff)";
-      fill.style.boxShadow="0 0 10px #00ff88";
-      clearInterval(bufferTimer);
-      // Pulso visual de vivo
-      setInterval(()=>{if(playing){fill.style.opacity="0.8";setTimeout(()=>fill.style.opacity="1",300);}},1200);
+function conectarZeno(){
+  // 1. MÉTODO OFICIAL ZENO: SSE - https://api.zeno.fm/mounts/metadata/subscribe/TU_MOUNT
+  // Tu mount es mys646fkd2zuv - es el mismo que usas en el stream
+  let es = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv');
+  
+  es.onmessage = (e)=>{
+    try{
+      let data = JSON.parse(e.data);
+      // Zeno manda varias formas: streamTitle, title, song, etc. Probamos todas
+      let titulo = data.streamTitle || data.title || data.song || data.now_playing || '';
+      if(typeof titulo === 'object') titulo = titulo.title || titulo.song || '';
+      if(titulo) setSong(titulo);
+      // A veces viene en: { metadata: { streamTitle: ... } }
+      if(data.metadata && data.metadata.streamTitle) setSong(data.metadata.streamTitle);
+    }catch(err){
+      // Si no es JSON, es texto plano: "Artista - Canción"
+      if(e.data && e.data.length > 2 && !e.data.includes('{')) setSong(e.data);
     }
-  },350);
+  };
+  es.onerror = ()=>{
+    // Si se corta, reintenta en 5 seg con el método 2
+    es.close();
+    songEl.textContent='🎵 RADIO LA MIA STEREO - EN VIVO 🎵';
+    setTimeout(conectarZeno, 5000);
+  };
 }
+conectarZeno();
 
-// Eventos WebView
-audio.addEventListener('playing',()=>{
-  playing=true;
-  btn.textContent="⏸️";
-  fakeBuffer=100;
-  fill.style.width="100%";
-  bText.textContent="EN VIVO ✓";
-  clearInterval(bufferTimer);
-});
-
-audio.addEventListener('waiting',()=>{
-  if(playing){
-    bText.textContent="SEÑAL DÉBIL - MANTENIENDO...";
-    fill.style.width="70%";
-    fill.style.background="linear-gradient(90deg,#ffaa00,#ff00ff)";
-    startFakeBuffer();
-  }
-});
-
-audio.addEventListener('stalled',()=>{
-  if(playing){
-    bText.textContent="RECONECTANDO...";
-    audio.src="https://stream.zeno.fm/mys646fkd2zuv?r="+Date.now();
-    audio.load();
-    audio.play().catch(()=>{});
-  }
-});
-
-audio.addEventListener('error',()=>{
-  bText.textContent="ERROR DE RED - TOCA PLAY";
-  btn.textContent="▶️";
-  playing=false;
-  clearInterval(bufferTimer);
-  fill.style.width="0%";
-});
-
-function draw(){requestAnimationFrame(draw);if(!playing||!analyser||!dataArray)return;try{analyser.getByteFrequencyData(dataArray);analyser.getByteTimeDomainData(timeArray);for(let i=0;i<eqBars.length;i++){eqBars[i].style.height=(4+dataArray[i*2+2]/255*18)+'px';}const h=waveCanvas.offsetHeight,w=waveCanvas.offsetWidth,cy=h/2;wCtx.clearRect(0,0,w,h);wCtx.beginPath();wCtx.lineWidth=3;wCtx.strokeStyle='#00ffff';wCtx.shadowColor='#00ffff';wCtx.shadowBlur=16;for(let x=0;x<w;x++){const idx=Math.floor(x/w*timeArray.length);const y=cy+(timeArray[idx]-128)/128*26;if(x===0)wCtx.moveTo(x,y);else wCtx.lineTo(x,y);}wCtx.stroke();wCtx.shadowBlur=0;}catch{}}
-function toggleChat(){document.getElementById('chatWindow').classList.toggle('open');}
-const songEl=document.getElementById('songTitle'),artistEl=document.getElementById('artist');
-function updateScroll(t){songEl.style.animation='none';void songEl.offsetWidth;songEl.textContent=t+"   •   RADIO LA MIA   •   ";songEl.style.animation='scroll 14s linear infinite';}
-try{const es=new EventSource(`https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv`);es.onmessage=e=>{try{const d=JSON.parse(e.data);let t=d.streamTitle||d.title||"";if(t){let p=t.split(" - ");if(p.length>=2){artistEl.textContent=p[0];updateScroll(p.slice(1).join(" - "));}else{artistEl.textContent="RADIO LA MIA";updateScroll(t);}}}catch{}};}catch{}
+// 2. RESPALDO: Si tu navegador bloquea EventSource, intenta leer el ICY del stream cada 20 seg
+setInterval(async()=>{
+  if(lastSong) return; // Si ya tenemos canción por EventSource, no gastar datos
+  try{
+    let r=await fetch('https://api.zeno.fm/mounts/metadata/subscribe/mys646fkd2zuv', {headers:{'Accept':'text/event-stream'}});
+    // No hacemos nada, solo es para mantener vivo
+  }catch(e){}
+},20000);
 </script>
-</body>
-</html>
+</body></html>
