@@ -51,13 +51,13 @@ body{
   100%{transform:translateX(-15%)}
 }
 .marquee span.corto{animation:none}
-.marquee span.sin-datos{color:#ffcc00;animation:none}
-.eq{display:flex;align-items:end;justify-content:center;gap:4px;height:32px;margin:14px 0 6px}
-.eq i{display:block;width:5px;height:8px;background:linear-gradient(180deg,var(--c1),var(--c2));border-radius:4px;transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate}
-.eq i:nth-child(2n){animation-delay:.15s}.eq i:nth-child(3n){animation-delay:.3s}.eq i:nth-child(4n){animation-delay:.45s}
-@keyframes eq{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
-.paused .eq i{animation-play-state:paused;transform:scaleY(.25)}
-.paused .dot{animation-play-state:paused}
+
+/* ===== 3 ONDAS SINUSOIDALES HORIZONTALES ===== */
+.wave-box{margin:10px 16px 2px;height:56px;position:relative;overflow:hidden}
+.wave-box canvas{width:100%;height:100%;display:block}
+/* Cuando está en pausa, queda una línea plana */
+.paused .wave-box{opacity:.4}
+
 .controls{padding:8px 16px 0;display:flex;align-items:center;justify-content:center;gap:18px}
 .btn{width:52px;height:52px;border-radius:50%;border:1px solid #ffffff33;background:#ffffff10;color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:transform .15s;position:relative}
 .btn:active{transform:scale(.92)}
@@ -75,7 +75,7 @@ body{
   border:6px solid transparent;border-top-color:#fff;opacity:0;transition:opacity .2s;z-index:10;pointer-events:none;
 }
 .tip:hover::after,.tip:hover::before,.tip:active::after,.tip:active::before,.tip.show::after,.tip.show::before{opacity:1;transform:translateX(-50%) translateY(0)}
-.progress{margin:16px 16px 0;height:4px;background:#ffffff1a;border-radius:99px;overflow:hidden}
+.progress{margin:14px 16px 0;height:4px;background:#ffffff1a;border-radius:99px;overflow:hidden}
 #fill{height:100%;width:0%;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .4s}
 .row{margin:8px 16px 0;display:flex;justify-content:space-between;font-size:11px;color:#888}
 #status{color:var(--c1);font-weight:700;letter-spacing:1px}
@@ -100,7 +100,8 @@ body{
 
   <div class="marquee"><span id="song">🎵 CONECTANDO CON ZENO... 🎵</span></div>
 
-  <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <!-- SOLO 3 ONDAS SINUSOIDALES -->
+  <div class="wave-box"><canvas id="waveCanvas" width="360" height="56"></canvas></div>
 
   <div class="controls">
     <button class="btn tip" data-tip="Compartir radio" onclick="compartir()">↗️</button>
@@ -119,17 +120,108 @@ body{
   <div class="footer">RADIO LA MIA STEREO © 2026 • HECHO EN GUAYAQUIL</div>
 </div>
 
-<audio id="audio" preload="none" src="https://stream.zeno.fm/mys646fkd2zuv"></audio>
+<audio id="audio" preload="none" crossorigin="anonymous" src="https://stream.zeno.fm/mys646fkd2zuv"></audio>
 
 <script>
 let a=document.getElementById('audio'),btn=document.getElementById('playBtn'),card=document.getElementById('card'),status=document.getElementById('status'),fill=document.getElementById('fill'),vol=document.getElementById('volBtn');
 let playing=false;
+
+// ===== 3 ONDAS SINUSOIDALES AL SON DE LA MÚSICA - SIN CARGAR CPU =====
+let canvas=document.getElementById('waveCanvas');
+let ctx=canvas.getContext('2d');
+let audioCtx=null, analyser=null, dataArray=null;
+let waveTimer=null, t=0;
+// Amplitudes suavizadas para que no brinquen
+let amp1=4, amp2=4, amp3=4;
+
+function dibujarOndas(bajo, medio, agudo){
+  let W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  t += 0.18; // Velocidad de avance de la onda
+
+  // Suavizado: la onda no salta de golpe, sube poco a poco
+  amp1 += (bajo - amp1)*0.2;
+  amp2 += (medio - amp2)*0.2;
+  amp3 += (agudo - amp3)*0.2;
+
+  // Config de las 3 ondas: color, amplitud, velocidad, grosor
+  let ondas=[
+    {color:'#00e5ff', amp:amp1, freq:0.045, fase:t, grosor:2.5},      // Onda 1 - AZUL = BAJOS / BOMBO
+    {color:'#ff00aa', amp:amp2, freq:0.06, fase:t*1.3, grosor:2},    // Onda 2 - ROSADA = VOZ / MEDIOS
+    {color:'#00ff88', amp:amp3, freq:0.08, fase:t*1.7, grosor:1.6},   // Onda 3 - VERDE = AGUDOS / PLATILLOS
+  ];
+
+  ondas.forEach(o=>{
+    ctx.beginPath();
+    for(let x=0;x<=W;x+=3){
+      let y = H/2 + Math.sin(x*o.freq + o.fase) * o.amp;
+      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle=o.color;
+    ctx.lineWidth=o.grosor;
+    ctx.lineCap='round';
+    ctx.stroke();
+  });
+}
+
+function dibujarPlano(){
+  let W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.beginPath();
+  ctx.moveTo(0,H/2); ctx.lineTo(W,H/2);
+  ctx.strokeStyle='#ffffff33'; ctx.lineWidth=1.5; ctx.stroke();
+}
+dibujarPlano();
+
+function iniciarOndas(){
+  try{
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let source = audioCtx.createMediaElementSource(a);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64; // Chiquito para no gastar CPU
+      analyser.smoothingTimeConstant = 0.85;
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+    if(audioCtx.state==='suspended') audioCtx.resume();
+
+    if(waveTimer) clearInterval(waveTimer);
+    // SOLO 15 veces por segundo, no 60. Así se ve fluido y no calienta
+    waveTimer = setInterval(()=>{
+      if(!playing || !analyser) return;
+      analyser.getByteFrequencyData(dataArray);
+      // Bajo = primeros valores, Medio = centro, Agudo = últimos
+      let bajo = (dataArray[1]/255)*22 + 3;   // 3 a 25px de alto
+      let medio = (dataArray[8]/255)*16 + 3;
+      let agudo = (dataArray[16]/255)*12 + 2;
+      dibujarOndas(bajo, medio, agudo);
+    }, 66);
+
+  }catch(e){
+    // Si Zeno bloquea el analizador, ondas simuladas suaves
+    if(waveTimer) clearInterval(waveTimer);
+    waveTimer = setInterval(()=>{
+      if(!playing) return;
+      let bajo = 5 + Math.random()*14;
+      let medio = 4 + Math.random()*10;
+      let agudo = 3 + Math.random()*8;
+      dibujarOndas(bajo, medio, agudo);
+    }, 120);
+  }
+}
+function pararOndas(){
+  if(waveTimer) clearInterval(waveTimer);
+  dibujarPlano();
+}
+
 btn.onclick=async()=>{
   if(!playing){
     status.textContent='CONECTANDO...';fill.style.width='25%';
-    try{await a.play();playing=true;btn.textContent='⏸️';btn.setAttribute('data-tip','Pausar radio');card.classList.remove('paused');status.textContent='● EN VIVO - SONANDO';fill.style.width='100%';}
+    try{await a.play();playing=true;btn.textContent='⏸️';btn.setAttribute('data-tip','Pausar radio');card.classList.remove('paused');status.textContent='● EN VIVO - SONANDO';fill.style.width='100%';iniciarOndas();}
     catch(e){status.textContent='TOCA DE NUEVO PARA SONAR';}
-  }else{a.pause();playing=false;btn.textContent='▶️';btn.setAttribute('data-tip','Toca para escuchar');card.classList.add('paused');status.textContent='PAUSADO';fill.style.width='0%';}
+  }else{a.pause();playing=false;btn.textContent='▶️';btn.setAttribute('data-tip','Toca para escuchar');card.classList.add('paused');status.textContent='PAUSADO';fill.style.width='0%';pararOndas();}
 };
 vol.onclick=()=>{a.muted=!a.muted;vol.textContent=a.muted?'🔇':'🔊';vol.setAttribute('data-tip',a.muted?'Activar sonido':'Silencio / Sonido');};
 function compartir(){if(navigator.share){navigator.share({title:'Radio La Mia Stereo',text:'Escucha Radio La Mia Stereo en vivo',url:location.href})}else{prompt('Copia el link:',location.href)}}
@@ -139,8 +231,7 @@ a.addEventListener('playing',()=>{status.textContent='● EN VIVO - SONANDO';fil
 document.querySelectorAll('.tip').forEach(el=>{
   el.addEventListener('touchstart',()=>{el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500)},{passive:true});
 });
-
-// ===== NOMBRE REAL DESDE ZENO CON EventSource =====
+// ===== NOMBRE REAL DESDE ZENO =====
 let songEl=document.getElementById('song');
 let lastSong='';
 function setSong(txt){
@@ -155,7 +246,6 @@ function setSong(txt){
   lastSong=txt;
   songEl.style.animation='none';
   songEl.textContent='🎵 '+txt+' 🎵';
-  songEl.classList.remove('sin-datos');
   songEl.classList.toggle('corto', txt.length < 28);
   void songEl.offsetWidth;
   songEl.style.animation='';
